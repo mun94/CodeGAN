@@ -7,6 +7,7 @@ class Gen_Data_loader():
         self.batch_size = batch_size
         self.token_stream = []
         self.word2idx = collections.defaultdict()
+
     def create_batches(self, data_file):
         self.token_stream = []
         with open(data_file, 'r') as f:

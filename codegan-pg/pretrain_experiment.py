@@ -31,7 +31,6 @@ class PoemGen(model.LSTM):
     def g_optimizer(self, *args, **kwargs):
         return tf.train.AdamOptimizer()  # ignore learning rate
 
-
 def get_trainable_model(num_emb):
     return PoemGen(num_emb, BATCH_SIZE, EMB_DIM, HIDDEN_DIM, SEQ_LENGTH, START_TOKEN)
 
@@ -68,7 +67,7 @@ def pre_train_epoch(sess, trainable_model, data_loader):
         _, g_loss, g_pred = trainable_model.pretrain_step(sess, batch)
         supervised_g_losses.append(g_loss)
 
-    print '>>>> generator train loss:', np.mean(supervised_g_losses)
+    print('>>>> generator train loss:', np.mean(supervised_g_losses))
     return np.mean(supervised_g_losses)
 
 
@@ -97,17 +96,17 @@ def main():
 
     log = open('log/experiment-log.txt', 'w')
     #  pre-train generator
-    print 'Start pre-training...'
+    print('Start pre-training...')
     log.write('pre-training...\n')
     for epoch in xrange(PRE_EPOCH_NUM):
-        print 'pre-train epoch:', epoch
+        print('pre-train epoch:', epoch)
         loss = pre_train_epoch(sess, generator, gen_data_loader)
         if epoch % 5 == 0:
             generate_samples(sess, generator, BATCH_SIZE, generated_num, eval_file)
             print(eval_file)
             likelihood_data_loader.create_batches(eval_file)
             test_loss = target_loss(sess, target_lstm, likelihood_data_loader)
-            print 'pre-train epoch ', epoch, 'test_loss ', test_loss
+            print('pre-train epoch ', epoch, 'test_loss ', test_loss)
             buffer = str(epoch) + ' ' + str(test_loss) + '\n'
             log.write(buffer)
 
